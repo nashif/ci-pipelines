@@ -54,9 +54,12 @@ jobs:
             ./make_zephyr_sdk.sh;
             sdk_filename=$(ls -1 zephyr-sdk*);
             toolchain_files=$(ls -1 zephyr-toolchain-*);
+            hosttools_filename=$(ls -1 toolchains/*hosttools*);
             echo "Uploading to S3";
+            ls -la;
             echo "SDK file name: ${sdk_filename}";
             echo "Toolchain file names: ${toolchain_files}";
+            echo "Hosttool file name: ${hosttools_filename}"
             if [ ${S3_PUB_PATH} ]; then
               # Copy artifacts to a safe location for later download
               aws s3 sync ${S3_PATH} ${S3_PUB_PATH}
@@ -88,6 +91,13 @@ jobs:
               echo ${GH_ASSET}
               curl --data-binary @"${sdk_filename}" -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/octet-stream" ${GH_ASSET};
 
+              # Upload asset
+              echo "Uploading asset ${hosttools_filename}... "
+              # Construct url
+              GH_ASSET="https://uploads.github.com/repos/zephyrproject-rtos/sdk-ng/releases/$id/assets?name=\"$(basename $hosttools_filename)\""
+              echo ${GH_ASSET}
+              curl --data-binary @"${hosttools_filename}" -H "Authorization: token $GH_TOKEN" -H "Content-Type: application/octet-stream" ${GH_ASSET};
+
               for toolchain in $toolchain_files; do
                 # Upload asset
                 echo "Uploading asset ${toolchain}... "
@@ -100,6 +110,8 @@ jobs:
             if [ ${S3_PUB_PATH} ]; then
               echo "Uploading ${sdk_filename} to S3";
               aws s3 cp ${sdk_filename} ${S3_PUB_PATH}
+              echo "Uploading ${hosttools_filename} to S3";
+              aws s3 cp ${hosttools_filename} ${S3_PUB_PATH}
               for toolchain in $toolchain_files; do
                 echo "Uploading ${toolchain} to S3";
                 aws s3 cp ${toolchain} ${S3_PUB_PATH}
