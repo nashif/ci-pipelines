@@ -230,13 +230,16 @@ jobs:
             - cd $(shipctl get_resource_state "testing_repo")
             - pip3 install west
             - export CITOOLS=$(shipctl get_resource_state "ci_tools_check_repo")
+            - echo ${TESTING_REPO_PULL_REQUEST}
             - git fetch origin pull/${TESTING_REPO_PULL_REQUEST}/head
             - git checkout -f FETCH_HEAD
             - export SHA=$(git rev-parse HEAD)
+            - echo ${TESTING_REPO_BASE_BRANCH}
             - git merge -q origin/${TESTING_REPO_BASE_BRANCH}
             - git rebase origin/${TESTING_REPO_BASE_BRANCH};
             - source zephyr-env.sh
             - export COMMIT_RANGE=origin/${TESTING_REPO_BASE_BRANCH}..HEAD
+            - echo ${TESTING_REPO_REPO_FULL_NAME}
             - ${CITOOLS}/scripts/what_changed.py -r ${TESTING_REPO_REPO_FULL_NAME} -p ${TESTING_REPO_PULL_REQUEST} --commits ${COMMIT_RANGE}
             - ${CITOOLS}/scripts/check_compliance.py -g -r ${TESTING_REPO_REPO_FULL_NAME} -s -S ${SHA}
             - echo "Building a Pull Request";
@@ -288,9 +291,11 @@ jobs:
           script:
             - sudo pip3 install -U west
             - cd $(shipctl get_resource_state "main_repo")
+            - echo ${MAIN_REPO_PULL_REQUEST}
             - git fetch origin pull/${MAIN_REPO_PULL_REQUEST}/head
             - git checkout -f FETCH_HEAD
             - export SHA=$(git rev-parse HEAD)
+            - echo ${MAIN_REPO_BASE_BRANCH}
             - git merge -q origin/${MAIN_REPO_BASE_BRANCH}
             - git rebase origin/${MAIN_REPO_BASE_BRANCH};
             - cd ..
@@ -302,6 +307,7 @@ jobs:
             - sudo pip3 install -r ${CITOOLS}/requirements.txt
             - source zephyr-env.sh
             - export COMMIT_RANGE=origin/${MAIN_REPO_BASE_BRANCH}..HEAD
+            - echo ${MAIN_REPO_REPO_FULL_NAME}
             - ${CITOOLS}/scripts/what_changed.py -r ${MAIN_REPO_REPO_FULL_NAME} -p ${MAIN_REPO_PULL_REQUEST} --commits ${COMMIT_RANGE}
             - ${CITOOLS}/scripts/check_compliance.py -g -r ${MAIN_REPO_REPO_FULL_NAME} -s -S ${SHA}
             - echo "Building a Pull Request";
