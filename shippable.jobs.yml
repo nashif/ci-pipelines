@@ -345,6 +345,8 @@ jobs:
 
   - name: zephyr-checks-tools
     type: runSh
+    runtime:
+      nodePool: checks
     triggerMode: parallel
     steps:
       - IN: github_token
