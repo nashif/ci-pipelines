@@ -14,7 +14,6 @@ jobs:
     type: runCI
     steps:
       - IN: daily-verify
-      - IN: daily-verify-arm
 
   - name: create_sdk_ng
     type: runSh
