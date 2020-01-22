@@ -186,6 +186,8 @@ jobs:
       - IN: codecov_testing
 
   - name: zephyr-daily-doc
+    runtime:
+      nodePool: large_nodes
     type: runSh
     steps:
       - IN: s3-token
@@ -209,7 +211,7 @@ jobs:
   - name: zephyr-checks
     type: runSh
     runtime:
-      nodePool: checks
+      nodePool: large_nodes
     steps:
       - IN: github_token
       - IN: s3-token
@@ -270,7 +272,7 @@ jobs:
   - name: zephyr-checks-main
     type: runSh
     runtime:
-      nodePool: checks
+      nodePool: large_nodes
     triggerMode: parallel
     steps:
       - IN: github_token
@@ -346,7 +348,7 @@ jobs:
   - name: zephyr-checks-tools
     type: runSh
     runtime:
-      nodePool: checks
+      nodePool: large_nodes
     triggerMode: parallel
     steps:
       - IN: github_token
