@@ -229,7 +229,6 @@ jobs:
               options: "--privileged=true --tty --net=bridge"
           script:
             - cd $(shipctl get_resource_state "testing_repo")
-            - pip3 install west
             - export CITOOLS=$(shipctl get_resource_state "ci_tools_check_repo")
             - echo ${TESTING_REPO_PULL_REQUEST}
             - git fetch origin pull/${TESTING_REPO_PULL_REQUEST}/head
@@ -290,7 +289,6 @@ jobs:
               pull: true
               options: "--privileged=true --tty --net=bridge"
           script:
-            - sudo pip3 install -U west
             - cd $(shipctl get_resource_state "main_repo")
             - echo ${MAIN_REPO_PULL_REQUEST}
             - git fetch origin pull/${MAIN_REPO_PULL_REQUEST}/head
