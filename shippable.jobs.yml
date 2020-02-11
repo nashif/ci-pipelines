@@ -204,6 +204,8 @@ jobs:
               options: "--privileged=true --tty --net=bridge"
           script:
             - cd $(shipctl get_resource_state "main_repo_doc");
+            - west -V
+            - west init -l .
             - git clone https://github.com/zephyrproject-rtos/ci-tools.git
             - ci-tools/scripts/build-docs.sh
 
