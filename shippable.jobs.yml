@@ -184,31 +184,6 @@ jobs:
       - IN: s3-token
       - IN: codecov_testing
 
-  - name: zephyr-daily-doc
-    runtime:
-      nodePool: large_nodes
-    type: runSh
-    steps:
-      - IN: s3-token
-      - IN: main_repo_doc
-        switch: off
-      - IN: daily-docs
-      - TASK:
-          name: daily_docs
-          runtime:
-            container: true
-            options:
-              imageName: zephyrprojectrtos/ci
-              imageTag: v0.11.3
-              pull: true
-              options: "--privileged=true --tty --net=bridge"
-          script:
-            - cd $(shipctl get_resource_state "main_repo_doc");
-            - west -V
-            - west init -l .
-            - git clone https://github.com/zephyrproject-rtos/ci-tools.git
-            - ci-tools/scripts/build-docs.sh
-
   - name: zephyr-checks
     type: runSh
     runtime:

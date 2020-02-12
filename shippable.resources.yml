@@ -22,11 +22,6 @@ resources:
       type: integration
       integration: "aws_s3_simple"
 
-    - name: daily-docs
-      type: time
-      seed:
-          interval: "50 22 * * *"
-
     - name: daily-verify
       type: time
       seed:
