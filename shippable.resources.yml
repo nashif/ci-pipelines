@@ -106,7 +106,7 @@ resources:
             only:
               - master
               - topic-sensors
-              - topic-gpio
+              - topic-devicetree
               - v1.14-branch
               - v2.0-branch
           buildOnPullRequest: true
