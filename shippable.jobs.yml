@@ -270,7 +270,7 @@ jobs:
             - export COMMIT_RANGE=origin/${MAIN_REPO_BASE_BRANCH}..HEAD
             - echo ${MAIN_REPO_REPO_FULL_NAME}
             - ${CITOOLS}/scripts/what_changed.py -r ${MAIN_REPO_REPO_FULL_NAME} -p ${MAIN_REPO_PULL_REQUEST} --commits ${COMMIT_RANGE}
-            - ${CITOOLS}/scripts/check_compliance.py -g -r ${MAIN_REPO_REPO_FULL_NAME} -s -S ${SHA}
+            - ${CITOOLS}/scripts/check_compliance.py -e Documentation -e License -g -r ${MAIN_REPO_REPO_FULL_NAME} -s -S ${SHA}
             - echo "Building a Pull Request";
             - echo "COMMIT_RANGE:" ${COMMIT_RANGE}
             - echo "MAIN_REPO_PULL_REQUEST:" ${MAIN_REPO_PULL_REQUEST}
