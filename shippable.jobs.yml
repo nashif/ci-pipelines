@@ -218,16 +218,10 @@ jobs:
             - export COMMIT_RANGE=origin/${TESTING_REPO_BASE_BRANCH}..HEAD
             - echo ${TESTING_REPO_REPO_FULL_NAME}
             - ${CITOOLS}/scripts/what_changed.py -r ${TESTING_REPO_REPO_FULL_NAME} -p ${TESTING_REPO_PULL_REQUEST} --commits ${COMMIT_RANGE}
-            - ${CITOOLS}/scripts/check_compliance.py -g -r ${TESTING_REPO_REPO_FULL_NAME} -s -S ${SHA}
+            - ${CITOOLS}/scripts/check_compliance.py -e License -e Documentation -g -r ${TESTING_REPO_REPO_FULL_NAME} -s -S ${SHA}
             - echo "Building a Pull Request";
             - ${CITOOLS}/scripts/check_compliance.py -e License -e Documentation --commits ${COMMIT_RANGE} -g -p ${TESTING_REPO_PULL_REQUEST} -r ${TESTING_REPO_REPO_FULL_NAME} -S ${SHA} -o compliance.xml
             - echo "Commit range:" ${COMMIT_RANGE}
-            - export S3_PATH="s3://builds.zephyrproject.org/${TESTING_REPO_REPO_FULL_NAME}/${TESTING_REPO_PULL_REQUEST}";
-            - junit2html compliance.xml tests.html
-            - mkdir -p ${TESTING_REPO_PULL_REQUEST}
-            - cp *.html ${TESTING_REPO_PULL_REQUEST}
-            - aws s3 cp s3://builds.zephyrproject.org/pr.html ${S3_PATH}/index.html
-            - aws s3 sync ${TESTING_REPO_PULL_REQUEST} ${S3_PATH}
 
   - name: zephyr-checks-main
     type: runSh
@@ -308,15 +302,9 @@ jobs:
             - export SHA=$(git rev-parse HEAD)
             - git merge -q origin/${CI_TOOLS_REPO_BASE_BRANCH}
             - git rebase origin/${CI_TOOLS_REPO_BASE_BRANCH};
-            - ${CITOOLS}/scripts/check_compliance.py -g -r ${CI_TOOLS_REPO_REPO_FULL_NAME} -s -S ${SHA}
+            - ${CITOOLS}/scripts/check_compliance.py -e Documentation -e License -g -r ${CI_TOOLS_REPO_REPO_FULL_NAME} -s -S ${SHA}
             - export COMMIT_RANGE=origin/${CI_TOOLS_REPO_BASE_BRANCH}..HEAD
             - echo "Building a Pull Request";
             - ${CITOOLS}/scripts/check_compliance.py -e Documentation --commits ${COMMIT_RANGE} -g -p ${CI_TOOLS_REPO_PULL_REQUEST} -r ${CI_TOOLS_REPO_REPO_FULL_NAME} -S ${SHA} -o compliance.xml || true
             - echo "Commit range:" ${COMMIT_RANGE}
-            - export S3_PATH="s3://builds.zephyrproject.org/${CI_TOOLS_REPO_REPO_FULL_NAME}/${CI_TOOLS_REPO_PULL_REQUEST}";
-            - junit2html compliance.xml tests.html
-            - mkdir -p ${CI_TOOLS_REPO_PULL_REQUEST}
-            - cp *.html ${CI_TOOLS_REPO_PULL_REQUEST}
-            - aws s3 cp s3://builds.zephyrproject.org/pr.html ${S3_PATH}/index.html
-            - aws s3 sync ${CI_TOOLS_REPO_PULL_REQUEST} ${S3_PATH}
 
